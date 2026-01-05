@@ -231,8 +231,17 @@ export default function Home() {
             {/* Pulsante ESCI */}
             <button
               onClick={async () => {
-                await supabase.auth.signOut();
-                window.location.href = '/login'; // Force reload/redirect
+                try {
+                  await supabase.auth.signOut();
+                  // Pulisce cache locale per evitare "finti" login
+                  localStorage.clear();
+                  sessionStorage.clear();
+                  // Forza il redirect ricaricando la pagina
+                  window.location.replace('/login');
+                } catch (error) {
+                  console.error("Errore logout:", error);
+                  window.location.href = '/login';
+                }
               }}
               className="text-xs font-bold text-white border border-white/50 px-4 py-2 rounded-lg hover:bg-white/10 active:bg-white/20 active:scale-95 transition-all touch-manipulation"
             >

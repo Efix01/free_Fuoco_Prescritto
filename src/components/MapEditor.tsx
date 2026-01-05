@@ -241,9 +241,16 @@ const MapEditor = forwardRef<MapEditorHandle, MapEditorProps>(({ onMapReady }, r
 
         // 1. Initialize Map with preferCanvas for better capture
         const map = L.map(mapContainerRef.current, {
-            preferCanvas: true
+            preferCanvas: true,
+            zoomControl: false // Lo aggiungiamo manualmente in topright
         }).setView([40.1209, 9.0129], 8);
         mapInstanceRef.current = map;
+
+        // Aggiungi zoom control in alto a destra (meno fastidioso su mobile)
+        L.control.zoom({ position: 'topright' }).addTo(map);
+
+        // Sposta attribuzione in basso a sinistra
+        map.attributionControl.setPosition('bottomleft');
 
         // 2. Add Tile Layer con crossOrigin per CORS
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -261,10 +268,10 @@ const MapEditor = forwardRef<MapEditorHandle, MapEditorProps>(({ onMapReady }, r
             shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
         });
 
-        // 4. Configure Geoman (Drawing Tools)
+        // 4. Configure Geoman (Drawing Tools) - spostato in topright per mobile
         map.pm.setLang('it');
         map.pm.addControls({
-            position: 'topleft',
+            position: 'topright',
             drawCircleMarker: false,
             drawPolyline: false,
             drawRectangle: true,
@@ -457,6 +464,36 @@ const MapEditor = forwardRef<MapEditorHandle, MapEditorProps>(({ onMapReady }, r
                 className="flex-grow z-0"
                 style={{ minHeight: '100%', height: '100%' }}
             />
+
+            {/* CSS per fix controlli su mobile */}
+            <style jsx global>{`
+                /* Riduci dimensione attribuzioni su mobile */
+                .leaflet-control-attribution {
+                    font-size: 8px !important;
+                    padding: 2px 4px !important;
+                    max-width: 180px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                /* Riduci dimensione controlli Geoman su mobile */
+                @media (max-width: 768px) {
+                    .leaflet-pm-toolbar {
+                        transform: scale(0.75);
+                        transform-origin: top right;
+                    }
+                    .leaflet-pm-toolbar .leaflet-pm-icon-delete,
+                    .leaflet-pm-toolbar .leaflet-pm-icon-edit {
+                        display: none !important;
+                    }
+                    .leaflet-control-zoom a {
+                        width: 26px !important;
+                        height: 26px !important;
+                        line-height: 26px !important;
+                        font-size: 14px !important;
+                    }
+                }
+            `}</style>
 
             {/* Indicatore cattura in corso */}
             {isCapturing && (

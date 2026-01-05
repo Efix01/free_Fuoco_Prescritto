@@ -234,7 +234,7 @@ export default function Home() {
                 await supabase.auth.signOut();
                 window.location.href = '/login'; // Force reload/redirect
               }}
-              className="text-[10px] font-bold text-white/80 hover:text-white border border-white/30 px-2 py-1 rounded hover:bg-white/10 transition-colors"
+              className="text-xs font-bold text-white border border-white/50 px-4 py-2 rounded-lg hover:bg-white/10 active:bg-white/20 active:scale-95 transition-all touch-manipulation"
             >
               ESCI
             </button>

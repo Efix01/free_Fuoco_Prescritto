@@ -160,7 +160,7 @@ export default function PersonnelManager({ onHoursUpdate }: { onHoursUpdate: (da
                 <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
                     <UserPlus className="text-green-700" size={18} /> Aggiungi al Database
                 </h3>
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
                     <input
                         type="text"
                         placeholder="Nome e Cognome"
@@ -172,14 +172,14 @@ export default function PersonnelManager({ onHoursUpdate }: { onHoursUpdate: (da
                     <select
                         value={newRole}
                         onChange={(e) => setNewRole(e.target.value)}
-                        className="border border-gray-200 p-2.5 rounded-lg text-sm bg-gray-50 w-36"
+                        className="border border-gray-200 p-2.5 rounded-lg text-sm bg-gray-50 w-full sm:w-36"
                     >
-                        <option value="Operatore Gauf">Operatore Gauf</option>
-                        <option value="Torcista">Torcista</option>
                         <option value="Addetto Pompe">Addetto Pompe</option>
                         <option value="Autista">Autista</option>
-                        <option value="Supervisore">Supervisore</option>
                         <option value="Direttore Operazioni">Direttore Ops</option>
+                        <option value="Operatore Gauf">Operatore Gauf</option>
+                        <option value="Supervisore">Supervisore</option>
+                        <option value="Torcista">Torcista</option>
                     </select>
                     <button
                         onClick={addPerson}

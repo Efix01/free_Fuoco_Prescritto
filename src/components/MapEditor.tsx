@@ -271,10 +271,10 @@ const MapEditor = forwardRef<MapEditorHandle, MapEditorProps>(({ onMapReady }, r
             shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
         });
 
-        // 4. Configure Geoman (Drawing Tools) - spostato in topright per mobile
+        // 4. Configure Geoman (Drawing Tools) - spostato a sinistra come richiesto
         map.pm.setLang('it');
         map.pm.addControls({
-            position: 'topright',
+            position: 'topleft',
             drawCircleMarker: false,
             drawPolyline: false,
             drawRectangle: true,

@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vado/Non Vado Checklist</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #eef2f3;
+            background-image: url('background_cfva.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            color: #2c3e50;
+        }
+
+        .page-container {
+            width: 100%;
+            max-width: 210mm;
+            min-height: 297mm;
+            background: white;
+            padding: 10mm;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            box-sizing: border-box;
+            border-radius: 4px;
+            margin: 20px auto;
+            /* Center it */
+        }
+
+        /* Input styling */
+        input[type="text"],
+        input[type="date"] {
+            border: none;
+            border-bottom: 1px solid #2c3e50;
+            background: transparent;
+            width: 100%;
+            font-family: inherit;
+            font-size: 16px;
+            /* Prevent zoom on iOS */
+            padding: 5px;
+            outline: none;
+            color: #2c3e50;
+        }
+
+        .input-row {
+            display: flex;
+            margin-bottom: 10px;
+            align-items: baseline;
+            flex-wrap: wrap;
+            /* Allow wrapping on small screens */
+        }
+
+        /* ... existing styles ... */
+
+        /* Mobile specific adjustments */
+        @media screen and (max-width: 768px) {
+            body {
+                margin: 0;
+                padding: 10px;
+                display: block;
+                /* Removing flex centering to allow full width scroll */
+            }
+
+            .page-container {
+                padding: 15px;
+                width: 100%;
+                margin: 0;
+                border-radius: 0;
+            }
+
+            .nav-bar {
+                padding: 10px;
+            }
+
+            .nav-link span {
+                font-size: 1.2em;
+            }
+
+            .nav-select {
+                max-width: 150px;
+            }
+
+            /* Stack specific flex containers if needed */
+            .input-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+
+            .input-label {
+                margin-bottom: 2px;
+            }
+
+            /* Make tables horizontal scrollable if needed or adjust font */
+            th,
+            td {
+                font-size: 12px;
+                padding: 4px;
+            }
+
+            .question-text {
+                font-size: 12px;
+            }
+
+            /* Adjust checkbox sizes for touch */
+            .checkbox-container {
+                gap: 10px;
+            }
+        }
+
+
+        /* Top Inputs */
+        .top-inputs {
+            margin-bottom: 20px;
+        }
+
+        .input-row {
+            display: flex;
+            margin-bottom: 10px;
+            align-items: baseline;
+        }
+
+        .input-label {
+            font-weight: bold;
+            margin-right: 10px;
+            white-space: nowrap;
+        }
+
+        /* Title */
+        .main-title {
+            text-align: center;
+            font-size: 14pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 20px;
+        }
+
+        .sub-title {
+            text-align: center;
+            font-size: 10pt;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* Tables & Boxes */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 0;
+            /* Merged look */
+        }
+
+        th,
+        td {
+            border: 1px solid #7f8c8d;
+            padding: 8px;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: #bdc3c7;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .center-text {
+            text-align: center;
+        }
+
+        /* Checkbox styling */
+        .checkbox-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .checkbox-label {
+            font-size: 9pt;
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+
+        .big-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #2c3e50;
+            display: inline-block;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .big-checkbox input {
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin: 0;
+        }
+
+        .big-checkbox input:checked+span::after {
+            content: 'X';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        /* Custom visual checkbox */
+        .custom-check {
+            width: 28px;
+            height: 28px;
+            border: 2px solid #2c3e50;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #2c3e50;
+        }
+
+        .section-header {
+            background-color: #bdc3c7;
+            font-weight: bold;
+            padding: 5px;
+            border: 1px solid #7f8c8d;
+        }
+
+        /* Question list styling */
+        .question-text {
+            font-size: 10pt;
+        }
+
+        .instruction-note {
+            font-size: 9pt;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        @media print {
+            body {
+                background: none;
+                margin: 0;
+            }
+
+            .page-container {
+                box-shadow: none;
+                width: 100%;
+                height: auto;
+                padding: 0;
+            }
+        }
+
+        /* Navigation Menu Styles */
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(44, 62, 80, 0.98);
+            color: white;
+            padding: 10px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 2000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+            backdrop-filter: blur(5px);
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-link:hover {
+            color: #bdc3c7;
+        }
+
+        .nav-select {
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            color: #2c3e50;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            outline: none;
+        }
+
+        /* Reset Button Style */
+        .nav-btn-reset {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-btn-reset:hover {
+            background-color: #c0392b;
+        }
+
+        /* Print Button Style */
+        .nav-btn-print {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-btn-print:hover {
+            background-color: #2980b9;
+        }
+
+        @media print {
+            .nav-bar {
+                display: none;
+            }
+
+            .page-container {
+                margin-top: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="nav-bar">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <a href="index.html" class="nav-link">
+                <span>&#8592;</span> Home
+            </a>
+        </div>
+
+        <div style="display: flex; align-items: center;">
+            <button class="nav-btn-print" onclick="window.print()">
+                &#128426; Stampa
+            </button>
+            <button class="nav-btn-reset" onclick="resetModule()">
+                &#8635; Reset
+            </button>
+            <select class="nav-select" onchange="if(this.value) window.location.href=this.value">
+                <option value="" disabled selected>VAI A...</option>
+                <option value="progetto_fuoco.html">Progetto di Fuoco</option>
+                <option value="fase_preparazione.html">Fase Preparazione</option>
+                <option value="checklist_pre_esecuzione.html">Pre-Esecuzione</option>
+                <option value="checklist_attrezzature.html">Attrezzature</option>
+                <option value="piano_operativo.html">Piano Operativo</option>
+                <option value="piano_notifica.html">Piano Notifica</option>
+                <option value="checklist_vado_non_vado.html">Vado/Non Vado</option>
+            </select>
+        </div>
+    </nav>
+
+    <div class="page-container" style="margin-top: 60px;">
+
+        <div style="text-align: center; margin-bottom: 30px;">
+            <img src="logo_cfva.png" alt="Logo Corpo Forestale" style="height: 80px;">
+        </div>
+
+
+        <div class="top-inputs">
+            <div class="input-row">
+                <span class="input-label">Nome Progetto:</span>
+                <input type="text">
+            </div>
+            <div class="input-row">
+                <span class="input-label">Unità di accensione:</span>
+                <input type="text">
+            </div>
+        </div>
+
+        <div class="main-title">FUOCO PRESCRITTO VADO/NON VADOO CHECKLIST</div>
+        <div class="sub-title">(Progetto di Fuoco Prescritto, Allegato 2)</div>
+
+        <!-- Table 1: Preliminari -->
+        <table style="border-bottom: none;">
+            <tr>
+                <th style="width: 80%;">Considerazioni principali preliminari</th>
+                <th class="center-text">SI o NO</th>
+            </tr>
+            <tr>
+                <td>
+                    <div class="question-text">
+                        A. Sono sopraggiunti cambiamenti all'interno o nelle vicinanze dell'unità di accensione (ad
+                        esempio: condizioni di siccità o carichi di combustibile), che non sono stati considerati nello
+                        sviluppo delle prescrizioni del progetto?
+                    </div>
+                    <div class="instruction-note">
+                        Se <b>NO</b>, procedi con la Checklist Vado/Non Vado sotto, se <b>SI</b> vai al punto B.
+                    </div>
+                </td>
+                <td>
+                    <div class="checkbox-container">
+                        <div class="checkbox-item">
+                            <span class="checkbox-label">SI</span>
+                            <input type="checkbox">
+                        </div>
+                        <div class="checkbox-item">
+                            <span class="checkbox-label">NO</span>
+                            <input type="checkbox">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="question-text">
+                        B. Il Progetto del fuoco prescritto è stato rivisto ed è stata approvata una modifica; o è stato
+                        stabilito che non è necessaria alcuna modifica?
+                    </div>
+                    <div class="instruction-note">
+                        Se <b>SI</b>, procedi con la Checklist sotto.<br>
+                        Se <b>NO</b>, FERMATI: L'esecuzione non è consentita. É necessaria una modifica
+                    </div>
+                </td>
+                <td>
+                    <div class="checkbox-container">
+                        <div class="checkbox-item">
+                            <span class="checkbox-label">SI</span>
+                            <input type="checkbox">
+                        </div>
+                        <div class="checkbox-item">
+                            <span class="checkbox-label">NO</span>
+                            <input type="checkbox">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Table 2: Checklist -->
+        <table style="margin-top: 10px;">
+            <tr>
+                <th style="width: 80%;">VADO/NON VADO Checklist</th>
+                <th class="center-text" style="font-size: 9pt;">SI o NO<br><span
+                        style="font-weight: normal; font-size: 8pt;">Sbarrare o cerchiare la scelta</span></th>
+            </tr>
+            <!-- Items -->
+            <tr>
+                <td>Sono stati ottenuti TUTTI i permessi e le autorizzazioni necessarie?</td>
+                <td class="center-text">
+                    <span style="margin-right: 15px;">SI</span> <span>NO</span>
+                    <div style="display:flex; justify-content: center; gap: 20px; margin-top: 5px;">
+                        <input type="checkbox"> <input type="checkbox">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>Sono state effettuate TUTTE le notifiche richieste?</td>
+                <td class="center-text">
+                    <span style="margin-right: 15px;">SI</span> <span>NO</span>
+                    <div style="display:flex; justify-content: center; gap: 20px; margin-top: 5px;">
+                        <input type="checkbox"> <input type="checkbox">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>TUTTE le considerazioni in fase di pre-combustione e i lavori di preparazione indicati nel progetto
+                    di fuoco prescritto sono stati completati, affrontati e verificati?</td>
+                <td class="center-text">
+                    <span style="margin-right: 15px;">SI</span> <span>NO</span>
+                    <div style="display:flex; justify-content: center; gap: 20px; margin-top: 5px;">
+                        <input type="checkbox"> <input type="checkbox">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>Sono state valutate TUTTE le previsioni meteo relativamente al rischio incendi, e sono queste
+                    favorevoli per l'esecuzione del fuoco prescritto?</td>
+                <td class="center-text">
+                    <span style="margin-right: 15px;">SI</span> <span>NO</span>
+                    <div style="display:flex; justify-content: center; gap: 20px; margin-top: 5px;">
+                        <input type="checkbox"> <input type="checkbox">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>TUTTI i parametri delle prescrizione sono soddisfatti?</td>
+                <td class="center-text">
+                    <span style="margin-right: 15px;">SI</span> <span>NO</span>
+                    <div style="display:flex; justify-content: center; gap: 20px; margin-top: 5px;">
+                        <input type="checkbox"> <input type="checkbox">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>TUTTE le specifiche relative alla gestione del fumo sono soddisfatte?</td>
+                <td class="center-text">
+                    <span style="margin-right: 15px;">SI</span> <span>NO</span>
+                    <div style="display:flex; justify-content: center; gap: 20px; margin-top: 5px;">
+                        <input type="checkbox"> <input type="checkbox">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>TUTTO il personale e le attrezzature delle operazioni pianificate sono in loco, disponibili e
+                    operativi?</td>
+                <td class="center-text">
+                    <span style="margin-right: 15px;">SI</span> <span>NO</span>
+                    <div style="display:flex; justify-content: center; gap: 20px; margin-top: 5px;">
+                        <input type="checkbox"> <input type="checkbox">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>È stata verificata la disponibilità di risorse per una eventuale emergenza, adeguata alla situazione
+                    odierna e sono disponibili?</td>
+                <td class="center-text">
+                    <span style="margin-right: 15px;">SI</span> <span>NO</span>
+                    <div style="display:flex; justify-content: center; gap: 20px; margin-top: 5px;">
+                        <input type="checkbox"> <input type="checkbox">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>TUTTO il personale è stato informato sugli obiettivi del progetto, la loro assegnazione, i rischi
+                    per la sicurezza, le vie di fuga e le zone di sicurezza (LACES)?</td>
+                <td class="center-text">
+                    <span style="margin-right: 15px;">SI</span> <span>NO</span>
+                    <div style="display:flex; justify-content: center; gap: 20px; margin-top: 5px;">
+                        <input type="checkbox"> <input type="checkbox">
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Logic Box -->
+        <div style="border: 1px solid #7f8c8d; border-top: none; padding: 10px;">
+            <p style="margin: 5px 0;">Se tutte le domande hanno risposta “SI”, procedere con un fuoco TEST. Documentare
+                le condizioni attuali, la posizione e i risultati. Se a qualche domanda è stato risposto "NO", NON
+                procedere con il fuoco TEST: non è consentito andare avanti con l'esecuzione dei lavori.</p>
+        </div>
+
+        <!-- Final Decision -->
+        <div style="border: 1px solid #7f8c8d; border-top: none; padding: 15px; text-align: center;">
+            <p style="margin-bottom: 15px; font-weight: bold;">Dopo aver valutato il fuoco TEST, a vostro giudizio il
+                fuoco prescritto può essere eseguito secondo il Progetto e raggiungerà l'obiettivo pianificato?</p>
+
+            <div class="checkbox-container">
+                <div class="checkbox-item">
+                    <span style="font-size: 14pt; font-weight: bold;">SI</span>
+                    <div class="custom-check"><input type="checkbox"></div>
+                </div>
+                <div style="width: 20px;">o</div>
+                <div class="checkbox-item">
+                    <span style="font-size: 14pt; font-weight: bold;">NO</span>
+                    <div class="custom-check"><input type="checkbox"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="top-inputs" style="margin-top: 40px;">
+            <div class="input-row">
+                <span class="input-label">Responsabile del Fuoco Prescritto:</span>
+                <input type="text" style="flex-grow: 1; margin-right: 20px;">
+                <span class="input-label">Data:</span>
+                <input type="text" style="width: 200px;">
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Auto-Save Functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const path = window.location.pathname;
+            const inputs = document.querySelectorAll('input, textarea, select');
+
+            // Load saved data
+            inputs.forEach((input, index) => {
+                if (input.classList.contains('nav-select')) return; // Skip nav menu
+                const key = `${path}_${index}`;
+                const savedValue = localStorage.getItem(key);
+                if (savedValue !== null) {
+                    if (input.type === 'checkbox' || input.type === 'radio') {
+                        input.checked = (savedValue === 'true');
+                    } else {
+                        input.value = savedValue;
+                    }
+                }
+
+                // Save data on change
+                input.addEventListener('input', () => saveInput(input, key));
+                input.addEventListener('change', () => saveInput(input, key));
+            });
+        });
+
+        function saveInput(input, key) {
+            if (input.type === 'checkbox' || input.type === 'radio') {
+                localStorage.setItem(key, input.checked);
+            } else {
+                localStorage.setItem(key, input.value);
+            }
+        }
+
+        function resetModule() {
+            if (confirm("Sei sicuro di voler resettare tutto il modulo? Tutti i dati inseriti e non salvati andranno persi.")) {
+                const path = window.location.pathname;
+                const inputs = document.querySelectorAll('input, textarea, select');
+                inputs.forEach((input, index) => {
+                    if (input.classList.contains('nav-select')) return; // Skip nav menu
+
+                    // Clear from localStorage
+                    const key = `${path}_${index}`;
+                    localStorage.removeItem(key);
+
+                    // Clear UI
+                    if (input.type === 'checkbox' || input.type === 'radio') {
+                        input.checked = false;
+                    } else {
+                        input.value = '';
+                    }
+                });
+                window.scrollTo(0, 0);
+            }
+        }
+    </script>
+</body>
+
+</html>

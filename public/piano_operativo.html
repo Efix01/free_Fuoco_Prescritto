@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piano Operativo e Sicurezza</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #eef2f3;
+            background-image: url('background_cfva.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            color: #2c3e50;
+        }
+
+        .page-container {
+            width: 100%;
+            max-width: 210mm;
+            min-height: 297mm;
+            background: white;
+            padding: 10mm;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            box-sizing: border-box;
+            border-radius: 4px;
+            margin: 20px auto;
+        }
+
+        /* Shared CSS styles */
+        .section-box {
+            border: 1px solid #bdc3c7;
+            margin-bottom: 25px;
+            border-radius: 6px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .header-bar {
+            background-color: #d1d8e0;
+            color: #2c3e50;
+            font-weight: 600;
+            padding: 8px 12px;
+            border-bottom: 1px solid #bdc3c7;
+            font-size: 14pt;
+        }
+
+        .sub-header-bar {
+            background-color: #e4e9ed;
+            font-weight: 600;
+            padding: 5px 10px;
+            font-size: 10pt;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        /* Input styling */
+        input[type="text"],
+        input[type="date"],
+        input[type="time"],
+        input[type="number"],
+        textarea {
+            border: 1px solid transparent;
+            background: #f0f8ff;
+            /* AliceBlue */
+            width: 100%;
+            font-family: inherit;
+            font-size: 10pt;
+            padding: 6px 8px;
+            outline: none;
+            color: #2c3e50;
+            border-radius: 4px;
+            transition: all 0.2s;
+            box-sizing: border-box;
+        }
+
+        input:focus,
+        textarea:focus {
+            background-color: #ffffff;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        input:hover,
+        textarea:hover {
+            background-color: #e1efff;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ecf0f1;
+            padding: 8px;
+            text-align: left;
+            font-size: 9.5pt;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: #e4e9ed;
+            font-weight: 600;
+            text-align: center;
+            border-bottom: 2px solid #bdc3c7;
+            vertical-align: middle;
+        }
+
+        /* Vado-Non Vado Specifics */
+        .go-no-go-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            /* Two columns layout */
+            gap: 0;
+        }
+
+        .go-no-go-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px;
+            border: 1px solid #ecf0f1;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        /* Fix borders for grid items to look like a table */
+        .go-no-go-grid .go-no-go-item:nth-child(odd) {
+            border-right: 1px solid #ecf0f1;
+        }
+
+        .go-no-go-label {
+            font-weight: 600;
+            font-size: 9.5pt;
+            flex-grow: 1;
+            padding-right: 10px;
+        }
+
+        .go-no-go-options {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 9pt;
+            white-space: nowrap;
+        }
+
+        .go-no-go-options label {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #2c3e50;
+        }
+
+        /* Footer specific */
+        .footer-row {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .footer-label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        @media print {
+            body {
+                background: none;
+                margin: 0;
+            }
+
+            .page-container {
+                box-shadow: none;
+                width: 100%;
+                height: auto;
+                padding: 0;
+            }
+
+            .go-no-go-grid {
+                grid-template-columns: 1fr 1fr;
+                /* Maintain 2 cols on print */
+            }
+        }
+
+        /* Navigation Menu Styles */
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(44, 62, 80, 0.98);
+            color: white;
+            padding: 10px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 2000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+            backdrop-filter: blur(5px);
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-link:hover {
+            color: #bdc3c7;
+        }
+
+        .nav-select {
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            color: #2c3e50;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            outline: none;
+        }
+
+        /* Reset Button Style */
+        .nav-btn-reset {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-btn-reset:hover {
+            background-color: #c0392b;
+        }
+
+        /* Print Button Style */
+        .nav-btn-print {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-btn-print:hover {
+            background-color: #2980b9;
+        }
+
+        @media print {
+            .nav-bar {
+                display: none;
+            }
+
+            .page-container {
+                margin-top: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="nav-bar">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <a href="index.html" class="nav-link">
+                <span>&#8592;</span> Home
+            </a>
+        </div>
+
+        <div style="display: flex; align-items: center;">
+            <button class="nav-btn-print" onclick="window.print()">
+                &#128426; Stampa
+            </button>
+            <button class="nav-btn-reset" onclick="resetModule()">
+                &#8635; Reset
+            </button>
+            <select class="nav-select" onchange="if(this.value) window.location.href=this.value">
+                <option value="" disabled selected>VAI A...</option>
+                <option value="progetto_fuoco.html">Progetto di Fuoco</option>
+                <option value="fase_preparazione.html">Fase Preparazione</option>
+                <option value="checklist_pre_esecuzione.html">Pre-Esecuzione</option>
+                <option value="checklist_attrezzature.html">Attrezzature</option>
+                <option value="piano_operativo.html">Piano Operativo</option>
+                <option value="piano_notifica.html">Piano Notifica</option>
+                <option value="checklist_vado_non_vado.html">Vado/Non Vado</option>
+            </select>
+        </div>
+    </nav>
+
+    <div class="page-container" style="margin-top: 60px;">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <img src="logo_cfva.png" alt="Logo Corpo Forestale" style="height: 80px;">
+        </div>
+
+        <!-- MEMBRI SQUADRA -->
+        <div class="section-box">
+            <div class="header-bar">Membri Squadra</div>
+            <div class="sub-header-bar">Membri della squadra presenti</div>
+            <table>
+                <!-- 10 header-less rows for team members -->
+                <tr>
+                    <td style="width: 50%;"><input type="text" placeholder="Nome Cognome"></td>
+                    <td style="width: 50%;"><input type="text" placeholder="Ruolo / Note"></td>
+                </tr>
+                <tr>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- PIANO DI ESECUZIONE -->
+        <div class="section-box">
+            <div class="header-bar">Piano di esecuzione del fuoco prescritto (piano di accensione)</div>
+            <div class="sub-header-bar">Disegna e scrivi il piano di accensione e allegalo al progetto</div>
+            <div style="padding: 10px;">
+                <textarea rows="8" placeholder="Descrivi qui il piano di accensione..."></textarea>
+                <div
+                    style="margin-top: 10px; border: 1px dashed #bdc3c7; padding: 10px; text-align: center; background-color: #f9f9f9; color: #7f8c8d; cursor: pointer;">
+                    Clicca per caricare mappa o schema (Allegato)
+                    <input type="file" style="display: none;"> <!-- Hidden input for visual purposes -->
+                </div>
+            </div>
+        </div>
+
+        <!-- VADO-NON VADO CHECKLIST -->
+        <div class="section-box">
+            <div class="header-bar">Vado-Non Vado Check List <span
+                    style="font-size: 0.7em; margin-left:10px; font-weight: normal;">(se rispondi NO, non bruciare prima
+                    di andare avanti)</span></div>
+
+            <div class="go-no-go-grid">
+                <!-- Col 1 -->
+                <div class="go-no-go-item">
+                    <div class="go-no-go-label">Fasce taglia fuoco o tracciolini preparati</div>
+                    <div class="go-no-go-options">
+                        <label>Yes <input type="checkbox"></label>
+                        <label>No <input type="checkbox"></label>
+                    </div>
+                </div>
+                <!-- Col 2 -->
+                <div class="go-no-go-item">
+                    <div class="go-no-go-label">Squadre disponibili adeguate</div>
+                    <div class="go-no-go-options">
+                        <label>Yes <input type="checkbox"></label>
+                        <label>No <input type="checkbox"></label>
+                    </div>
+                </div>
+
+                <!-- Col 1 -->
+                <div class="go-no-go-item">
+                    <div class="go-no-go-label">Quartieri vicini contattati</div>
+                    <div class="go-no-go-options">
+                        <label>Yes <input type="checkbox"></label>
+                        <label>No <input type="checkbox"></label>
+                    </div>
+                </div>
+                <!-- Col 2 -->
+                <div class="go-no-go-item">
+                    <div class="go-no-go-label">Obiettivi della gestione del fumo all'interno della prescrizione</div>
+                    <div class="go-no-go-options">
+                        <label>Yes <input type="checkbox"></label>
+                        <label>No <input type="checkbox"></label>
+                    </div>
+                </div>
+
+                <!-- Col 1 -->
+                <div class="go-no-go-item">
+                    <div class="go-no-go-label">Servizi/agenzie/amministrazioni contattate</div>
+                    <div class="go-no-go-options">
+                        <label>Yes <input type="checkbox"></label>
+                        <label>No <input type="checkbox"></label>
+                    </div>
+                </div>
+                <!-- Col 2 -->
+                <div class="go-no-go-item">
+                    <div class="go-no-go-label">Squadre informate sul piano e sulle condizioni di sicurezza</div>
+                    <div class="go-no-go-options">
+                        <label>Yes <input type="checkbox"></label>
+                        <label>No <input type="checkbox"></label>
+                    </div>
+                </div>
+
+                <!-- Col 1 -->
+                <div class="go-no-go-item">
+                    <div class="go-no-go-label">Condizioni meteo all'interno delle prescrizioni</div>
+                    <div class="go-no-go-options">
+                        <label>Yes <input type="checkbox"></label>
+                        <label>No <input type="checkbox"></label>
+                    </div>
+                </div>
+                <!-- Col 2 -->
+                <div class="go-no-go-item">
+                    <div class="go-no-go-label">Tutti i pericoli sono stati individuati</div>
+                    <div class="go-no-go-options">
+                        <label>Yes <input type="checkbox"></label>
+                        <label>No <input type="checkbox"></label>
+                    </div>
+                </div>
+
+                <!-- Col 1 -->
+                <div class="go-no-go-item">
+                    <div class="go-no-go-label">Attrezzatura ed equipaggiamento preparato</div>
+                    <div class="go-no-go-options">
+                        <label>Yes <input type="checkbox"></label>
+                        <label>No <input type="checkbox"></label>
+                    </div>
+                </div>
+                <!-- Col 2 -->
+                <div class="go-no-go-item">
+                    <div class="go-no-go-label">Puoi bruciare per raggiungere gli obiettivi prefissati</div>
+                    <div class="go-no-go-options">
+                        <label>Yes <input type="checkbox"></label>
+                        <label>No <input type="checkbox"></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PIANO DI CONTROLLO -->
+        <div class="section-box">
+            <div class="header-bar">Piano di controllo del fuoco</div>
+            <div style="padding: 10px; font-size: 10pt; line-height: 1.6;">
+                <ol style="margin: 0; padding-left: 20px;">
+                    <li><strong>Se il fuoco va fuori controllo</strong> ferma le ignizioni fino a che non sia tutto di
+                        nuovo sotto controllo</li>
+                    <li><strong>Utilizza i metodi standard</strong> per spegnere le fiamme e per controllare che il
+                        fuoco non sfugga al controllo</li>
+                    <li><strong>Se il fuoco non può essere contenuto</strong> con metodi standard utilizza altri metodi
+                        (i.e. controfuoco)</li>
+                    <li><strong>Se altri metodi non sono efficaci</strong> o non sono pratici, il responsabile chiederà
+                        assistenza</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- FOOTER / SIGNATURE -->
+        <div class="section-box" style="background-color: #e4e9ed; border: 1px solid #bdc3c7;">
+            <div style="padding: 10px; border-bottom: 1px solid #bdc3c7; font-weight: bold; background-color: #d1d8e0;">
+                Questo Progetto di Fuoco Prescritto è stato preparato da:
+            </div>
+            <div class="footer-row">
+                <span class="footer-label">Nome:</span>
+                <input type="text" style="flex-grow: 1; margin-right: 20px;" placeholder="Comm.s Cabiddu - Ass.c Usai">
+                <span class="footer-label">Data:</span>
+                <input type="text" style="width: 150px;" placeholder="novembre2021">
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Auto-Save Functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const path = window.location.pathname;
+            const inputs = document.querySelectorAll('input, textarea, select');
+
+            // Load saved data
+            inputs.forEach((input, index) => {
+                if (input.classList.contains('nav-select')) return; // Skip nav menu
+                const key = `${path}_${index}`;
+                const savedValue = localStorage.getItem(key);
+                if (savedValue !== null) {
+                    if (input.type === 'checkbox' || input.type === 'radio') {
+                        input.checked = (savedValue === 'true');
+                    } else {
+                        input.value = savedValue;
+                    }
+                }
+
+                // Save data on change
+                input.addEventListener('input', () => saveInput(input, key));
+                input.addEventListener('change', () => saveInput(input, key));
+            });
+        });
+
+        function saveInput(input, key) {
+            if (input.type === 'checkbox' || input.type === 'radio') {
+                localStorage.setItem(key, input.checked);
+            } else {
+                localStorage.setItem(key, input.value);
+            }
+        }
+
+        function resetModule() {
+            if (confirm("Sei sicuro di voler resettare tutto il modulo? Tutti i dati inseriti e non salvati andranno persi.")) {
+                const path = window.location.pathname;
+                const inputs = document.querySelectorAll('input, textarea, select');
+                inputs.forEach((input, index) => {
+                    if (input.classList.contains('nav-select')) return; // Skip nav menu
+
+                    // Clear from localStorage
+                    const key = `${path}_${index}`;
+                    localStorage.removeItem(key);
+
+                    // Clear UI
+                    if (input.type === 'checkbox' || input.type === 'radio') {
+                        input.checked = false;
+                    } else {
+                        input.value = '';
+                    }
+                });
+                window.scrollTo(0, 0);
+            }
+        }
+    </script>
+</body>
+
+</html>

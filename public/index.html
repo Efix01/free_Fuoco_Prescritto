@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CFVA - Checklist Operative</title>
+    <style>
+        :root {
+            --primary: #27ae60;
+            --secondary: #2c3e50;
+            --accent: #e67e22;
+            --light: #ecf0f1;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #f7f9fa;
+            background-image: url('background_cfva.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--secondary);
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            background-color: rgba(44, 62, 80, 0.95);
+            color: white;
+            width: 100%;
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .logo-container {
+            margin-bottom: 10px;
+        }
+
+        .logo-img {
+            height: 80px;
+            width: auto;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: #bdc3c7;
+            font-size: 0.85em;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            padding: 40px 20px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            box-sizing: border-box;
+            /* Ensure padding doesn't overflow */
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-left: 5px solid transparent;
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            /* Ensure it doesn't overflow small screens */
+            max-width: 100%;
+        }
+
+        /* Mobile Optimization */
+        @media screen and (max-width: 600px) {
+            .container {
+                padding: 20px 10px;
+            }
+
+            .card {
+                width: 100%;
+                /* Full width on mobile */
+                margin-bottom: 10px;
+            }
+
+            h1 {
+                font-size: 1.2rem;
+            }
+
+            .subtitle {
+                font-size: 0.8rem;
+            }
+
+            .logo-img {
+                height: 60px;
+                /* Smaller logo on mobile */
+            }
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-blue {
+            border-left-color: #3498db;
+        }
+
+        .card-green {
+            border-left-color: #27ae60;
+        }
+
+        .card-blue-light {
+            border-left-color: #3498db;
+        }
+
+        .card-purple {
+            border-left-color: #9b59b6;
+        }
+
+        .card-purple {
+            border-left-color: #9b59b6;
+        }
+
+        .card-red-alert {
+            border-left-color: #c0392b;
+        }
+
+        .card-orange {
+            border-left-color: #f39c12;
+        }
+
+        .card h2 {
+            margin: 0 0 10px 0;
+            font-size: 1.4em;
+        }
+
+        .card p {
+            margin: 0;
+            color: #7f8c8d;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .card-icon {
+            font-size: 2em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .footer {
+            margin-top: auto;
+            padding: 20px;
+            color: #95a5a6;
+            font-size: 0.8em;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="logo_cfva.png" alt="Logo CFVA" class="logo-img">
+        </div>
+        <h1>CFVA - Gestione Fuoco Prescritto</h1>
+        <div class="subtitle">Moduli Digitali Operativi</div>
+    </header>
+
+    <div class="container">
+        <a href="progetto_fuoco.html" class="card card-green">
+            <span class="card-icon">🌲</span>
+            <div>
+                <h2>Progetto di Fuoco</h2>
+                <p>Modulo generale con informazioni anagrafiche, catasto e notifiche.</p>
+            </div>
+        </a>
+
+        <a href="fase_preparazione.html" class="card card-blue">
+            <span class="card-icon">🌤️</span>
+            <div>
+                <h2>Fase di Preparazione</h2>
+                <p>Pianificazione meteo, schermatura fumo e condizioni del combustibile.</p>
+            </div>
+        </a>
+
+        <a href="checklist_pre_esecuzione.html" class="card card-red" style="border-left-color: #e74c3c;">
+            <span class="card-icon">✅</span>
+            <div>
+                <h2>Checklist Pre-Esecuzione</h2>
+                <p>Controlli su strutture, sicurezza e dati meteo osservati prima dell'avvio.</p>
+            </div>
+        </a>
+
+        <a href="checklist_attrezzature.html" class="card card-orange">
+            <span class="card-icon">🛠️</span>
+            <div>
+                <h2>Checklist Attrezzature</h2>
+                <p>Elenco e verifica disponibilità di attrezzature e mezzi necessari.</p>
+            </div>
+        </a>
+
+        <a href="piano_operativo.html" class="card card-purple">
+            <span class="card-icon">📋</span>
+            <div>
+                <h2>Piano Operativo</h2>
+                <p>Squadra, piano di accensione e checklist Vado-Non Vado.</p>
+            </div>
+        </a>
+
+        <a href="piano_notifica.html" class="card card-blue-light">
+            <span class="card-icon">📢</span>
+            <div>
+                <h2>Piano di Notifica</h2>
+                <p>Notifica proprietari, contatti istituzionali e dettagli intervento.</p>
+            </div>
+        </a>
+
+        <a href="checklist_vado_non_vado.html" class="card card-red-alert">
+            <span class="card-icon">🛑</span>
+            <div>
+                <h2>Vado / Non Vado</h2>
+                <p>Checklist di sicurezza critica (Allegato 2). Da compilare prima dell'accensione.</p>
+            </div>
+        </a>
+    </div>
+    </div>
+
+    <div class="footer">
+        Applicazione Web Interattiva - v1.1
+    </div>
+</body>
+
+</html>

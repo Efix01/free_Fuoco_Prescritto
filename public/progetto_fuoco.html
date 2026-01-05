@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progetto di Fuoco Prescritto</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #eef2f3;
+            background-image: url('background_cfva.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            color: #2c3e50;
+        }
+
+        .page-container {
+            width: 100%;
+            max-width: 210mm;
+            min-height: 297mm;
+            background: white;
+            padding: 10mm;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            box-sizing: border-box;
+            border-radius: 4px;
+            margin: 20px auto;
+        }
+
+        /* ... existing styles ... */
+
+        input[type="text"],
+        input[type="date"],
+        input[type="tel"],
+        input[type="number"],
+        textarea {
+            font-size: 16px;
+            /* Mobile Optimized */
+            /* ... other props ... */
+        }
+
+        .row {
+            display: flex;
+            border-bottom: 1px solid #ecf0f1;
+            flex-wrap: wrap;
+            /* Key for mobile stacking */
+        }
+
+        /* Mobile Optimization */
+        @media screen and (max-width: 768px) {
+            body {
+                margin: 0;
+                padding: 10px;
+                display: block;
+            }
+
+            .page-container {
+                width: 100%;
+                padding: 15px;
+                margin: 0;
+                border-radius: 0;
+            }
+
+            .row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .cell {
+                width: 100% !important;
+                /* Force full width stacking */
+                border-right: none;
+                border-bottom: 1px solid #f0f0f0;
+                padding: 5px;
+            }
+
+            .cell:last-child {
+                border-bottom: none;
+            }
+
+            .label {
+                margin-bottom: 2px;
+                display: block;
+            }
+
+            input[type="text"],
+            input[type="tel"] {
+                width: 100%;
+            }
+        }
+
+        /* End of Mobile Optimization block, continuing with original CSS */
+
+
+        /* General Table/Grid Styles */
+        .section-box {
+            border: 1px solid #bdc3c7;
+            margin-bottom: 25px;
+            border-radius: 6px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .header-bar {
+            background-color: #d1d8e0;
+            /* Soft Grey/Blue */
+            color: #2c3e50;
+            font-weight: 600;
+            padding: 8px 12px;
+            border-bottom: 1px solid #bdc3c7;
+            font-size: 12pt;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .row {
+            display: flex;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .row:last-child {
+            border-bottom: none;
+        }
+
+        .cell {
+            padding: 8px;
+            border-right: 1px solid #ecf0f1;
+            display: flex;
+            align-items: center;
+        }
+
+        .cell:last-child {
+            border-right: none;
+        }
+
+        .label {
+            font-weight: 500;
+            margin-right: 8px;
+            font-size: 9.5pt;
+            white-space: nowrap;
+            color: #7f8c8d;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="tel"],
+        input[type="number"],
+        textarea {
+            border: 1px solid transparent;
+            background: #f0f8ff;
+            /* AliceBlue - Very soft blue for inputs */
+            width: 100%;
+            font-family: inherit;
+            font-size: 10pt;
+            padding: 6px 8px;
+            outline: none;
+            color: #2c3e50;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        input:focus,
+        textarea:focus {
+            background-color: #ffffff;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        input:hover,
+        textarea:hover {
+            background-color: #e1efff;
+        }
+
+        .input-bg {
+            /* Now handled directly on input element for better UX */
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Specific Layout Tweaks */
+        .w-full {
+            width: 100%;
+        }
+
+        .flex-grow {
+            flex-grow: 1;
+        }
+
+        textarea {
+            resize: none;
+            height: 100%;
+            min-height: 50px;
+            line-height: 1.4;
+        }
+
+        /* Table specific for Notifiche */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ecf0f1;
+            padding: 8px;
+            text-align: left;
+            font-size: 9.5pt;
+        }
+
+        th {
+            background-color: #e4e9ed;
+            font-weight: bold;
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #bdc3c7;
+        }
+
+        .sub-header {
+            background-color: #f7f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        /* Highlight specific readonly/pre-filled fields slightly differently if needed */
+        input[value]:not(:focus) {
+            font-weight: 500;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+        }
+
+        /* Navigation Menu Styles */
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(44, 62, 80, 0.98);
+            color: white;
+            padding: 10px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 2000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+            backdrop-filter: blur(5px);
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-link:hover {
+            color: #bdc3c7;
+        }
+
+        .nav-select {
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            color: #2c3e50;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            outline: none;
+        }
+
+        /* Reset Button Style */
+        .nav-btn-reset {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-btn-reset:hover {
+            background-color: #c0392b;
+        }
+
+        /* Print Button Style */
+        .nav-btn-print {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-btn-print:hover {
+            background-color: #2980b9;
+        }
+
+        @media print {
+            .nav-bar {
+                display: none;
+            }
+
+            .page-container {
+                margin-top: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="nav-bar">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <a href="index.html" class="nav-link">
+                <span>&#8592;</span> Home
+            </a>
+        </div>
+
+        <div style="display: flex; align-items: center;">
+            <button class="nav-btn-print" onclick="window.print()">
+                &#128426; Stampa
+            </button>
+            <button class="nav-btn-reset" onclick="resetModule()">
+                &#8635; Reset
+            </button>
+            <select class="nav-select" onchange="if(this.value) window.location.href=this.value">
+                <option value="" disabled selected>VAI A...</option>
+                <option value="progetto_fuoco.html">Progetto di Fuoco</option>
+                <option value="fase_preparazione.html">Fase Preparazione</option>
+                <option value="checklist_pre_esecuzione.html">Pre-Esecuzione</option>
+                <option value="checklist_attrezzature.html">Attrezzature</option>
+                <option value="piano_operativo.html">Piano Operativo</option>
+                <option value="piano_notifica.html">Piano Notifica</option>
+                <option value="checklist_vado_non_vado.html">Vado/Non Vado</option>
+            </select>
+        </div>
+    </nav>
+
+    <div class="page-container" style="margin-top: 60px;">
+
+        <div style="text-align: center; margin-bottom: 30px;">
+            <img src="logo_cfva.png" alt="Logo Corpo Forestale" style="height: 80px;">
+        </div>
+        <h1>Progetto di Fuoco Prescritto</h1>
+
+        <!-- SEZIONE INFORMAZIONI -->
+        <div class="section-box">
+            <div class="header-bar">Informazioni</div>
+
+            <div class="row">
+                <div class="cell" style="width: 100%;">
+                    <span class="label">Proprietario/Locatario</span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="cell flex-grow">
+                    <span class="label">Nome:</span>
+                    <input type="text" value="COMUNE BARISARDO" class="input-bg">
+                </div>
+                <div class="cell" style="width: 150px;">
+                    <span class="label">Tel:</span>
+                    <input type="tel" class="input-bg">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="cell flex-grow">
+                    <span class="label">Indirizzo:</span>
+                    <input type="text" class="input-bg">
+                </div>
+                <div class="cell flex-grow">
+                    <span class="label">Località:</span>
+                    <input type="text" value="FODDINI" class="input-bg">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="cell flex-grow">
+                    <span class="label">Città:</span>
+                    <input type="text" value="BARISARDO" class="input-bg">
+                </div>
+                <div class="cell flex-grow">
+                    <span class="label">Prov:</span>
+                    <input type="text" class="input-bg">
+                </div>
+                <div class="cell flex-grow">
+                    <span class="label">CAP:</span>
+                    <input type="text" class="input-bg">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="cell w-full">
+                    <span class="label">Descrizione area da bruciare</span>
+                    <input type="text" class="input-bg">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="cell w-full">
+                    <span class="label">Intervento numero</span>
+                    <input type="text" class="input-bg">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="cell flex-grow">
+                    <span class="label">Vegetazione presente:</span>
+                    <input type="text" class="input-bg">
+                </div>
+                <div class="cell" style="width: 120px;">
+                    <span class="label">Ettari:</span>
+                    <input type="number" value="28.5" step="0.1" class="input-bg" style="font-weight: bold;">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="cell flex-grow">
+                    <span class="label">Riferimenti catasto</span>
+                </div>
+                <div class="cell">
+                    <span class="label">Foglio:</span>
+                    <input type="text" value="33" class="input-bg" style="width: 40px;">
+                </div>
+                <div class="cell">
+                    <span class="label">Mappale:</span>
+                    <input type="text" value="422 COM" class="input-bg" style="width: 80px;">
+                </div>
+                <div class="cell">
+                    <span class="label">Sub:</span>
+                    <input type="text" value="389 DEMANIO" class="input-bg" style="width: 100px;">
+                </div>
+            </div>
+
+            <!-- Indicazioni città -->
+            <div class="row" style="background-color: #d9d9d9;">
+                <div class="cell w-full">
+                    <span class="label">Indicazioni della città/paese più vicino:</span>
+                </div>
+            </div>
+            <div class="row" style="height: 80px;">
+                <div class="cell w-full input-bg" style="align-items: flex-start;">
+                    <textarea></textarea>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="cell flex-grow">
+                    <span class="label">Date previste fuoco prescritto:</span>
+                    <input type="text" value="APRILE 2022" class="input-bg">
+                </div>
+                <div class="cell flex-grow">
+                    <span class="label">Data prevista:</span>
+                    <input type="date" class="input-bg">
+                </div>
+            </div>
+
+            <!-- Obiettivi -->
+            <div class="row" style="background-color: #d9d9d9;">
+                <div class="cell w-full">
+                    <span class="label">Obiettivi da raggiungere</span>
+                </div>
+            </div>
+            <div class="row" style="height: 80px;">
+                <div class="cell w-full input-bg" style="align-items: flex-start;">
+                    <textarea>ELIMINAZIONE COMBUSTILE PER MITIGARE propagazione INCENDIO</textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEZIONE NOTIFICHE -->
+        <div class="section-box">
+            <div class="header-bar">Notifiche</div>
+
+            <table>
+                <tr>
+                    <th rowspan="2" style="width: 40%;">Quando si brucia in determinate aree, contattare:</th>
+                    <th colspan="1" style="width: 30%; font-size: 8pt; background: #e0e0e0;">Ente/Istituzione</th>
+                    <th colspan="1" style="width: 30%; font-size: 8pt; background: #e0e0e0;">Telefono</th>
+                </tr>
+                <tr>
+                    <td style="background: #f9f9f9;"></td>
+                    <td style="background: #f9f9f9;"></td>
+                </tr>
+
+                <!-- Header Row Type 1 -->
+                <tr class="sub-header">
+                    <td>Servizio/Ripartimento/Agenzia/Comune</td>
+                    <td>Telefono</td>
+                    <td>Data, Ora e Persona contattata</td>
+                </tr>
+                <tr>
+                    <td><input type="text" value="STIR CFVA LANUSEI" class="input-bg"></td>
+                    <td><input type="text" value="0782 450090" class="input-bg"></td>
+                    <td><input type="text" class="input-bg"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="input-bg"></td>
+                    <td><input type="text" class="input-bg"></td>
+                    <td><input type="text" class="input-bg"></td>
+                </tr>
+
+                <!-- Header Row Type 2 -->
+                <tr class="sub-header">
+                    <td>Proprietari terrieri adiacenti</td>
+                    <td>Telefono</td>
+                    <td>Data, Ora e Persona contattata</td>
+                </tr>
+                <tr>
+                    <td><input type="text" value="COMUNE" class="input-bg"></td>
+                    <td><input type="text" class="input-bg"></td>
+                    <td><input type="text" class="input-bg"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="input-bg"></td>
+                    <td><input type="text" class="input-bg"></td>
+                    <td><input type="text" class="input-bg"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="input-bg"></td>
+                    <td><input type="text" class="input-bg"></td>
+                    <td><input type="text" class="input-bg"></td>
+                </tr>
+
+                <!-- Header Row Type 3 -->
+                <tr class="sub-header">
+                    <td>Altri da contattare (Agenzia Forestas, VVFF, Presidi medici, Ospedali, ecc.)</td>
+                    <td>Telefono</td>
+                    <td>Data, Ora e Persona contattata</td>
+                </tr>
+                <tr>
+                    <td><input type="text" value="FORESTAS" class="input-bg"></td>
+                    <td><input type="text" value="0782 490700" class="input-bg"></td>
+                    <td><input type="text" class="input-bg"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" value="VV.FF" class="input-bg"></td>
+                    <td><input type="text" value="115" class="input-bg"></td>
+                    <td><input type="text" class="input-bg"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" value="VOLONTARI BARISARDO" class="input-bg"></td>
+                    <td><input type="text" value="cell" class="input-bg"></td>
+                    <td><input type="text" class="input-bg"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="input-bg"></td>
+                    <td><input type="text" class="input-bg"></td>
+                    <td><input type="text" class="input-bg"></td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+        // Auto-Save Functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const path = window.location.pathname;
+            const inputs = document.querySelectorAll('input, textarea, select');
+
+            // Load saved data
+            inputs.forEach((input, index) => {
+                if (input.classList.contains('nav-select')) return; // Skip nav menu
+                const key = `${path}_${index}`;
+                const savedValue = localStorage.getItem(key);
+                if (savedValue !== null) {
+                    if (input.type === 'checkbox' || input.type === 'radio') {
+                        input.checked = (savedValue === 'true');
+                    } else {
+                        input.value = savedValue;
+                    }
+                }
+
+                // Save data on change
+                input.addEventListener('input', () => saveInput(input, key));
+                input.addEventListener('change', () => saveInput(input, key));
+            });
+        });
+
+        function saveInput(input, key) {
+            if (input.type === 'checkbox' || input.type === 'radio') {
+                localStorage.setItem(key, input.checked);
+            } else {
+                localStorage.setItem(key, input.value);
+            }
+        }
+
+        function resetModule() {
+            if (confirm("Sei sicuro di voler resettare tutto il modulo? Tutti i dati inseriti e non salvati andranno persi.")) {
+                const path = window.location.pathname;
+                const inputs = document.querySelectorAll('input, textarea, select');
+                inputs.forEach((input, index) => {
+                    if (input.classList.contains('nav-select')) return; // Skip nav menu
+
+                    // Clear from localStorage
+                    const key = `${path}_${index}`;
+                    localStorage.removeItem(key);
+
+                    // Clear UI
+                    if (input.type === 'checkbox' || input.type === 'radio') {
+                        input.checked = false;
+                    } else {
+                        input.value = '';
+                    }
+                });
+                window.scrollTo(0, 0);
+            }
+        }
+    </script>
+</body>
+
+</html>

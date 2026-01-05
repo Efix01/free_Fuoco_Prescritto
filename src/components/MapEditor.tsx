@@ -32,6 +32,9 @@ const MapEditor = forwardRef<MapEditorHandle, MapEditorProps>(({ onMapReady }, r
     const [isFetchingWeather, setIsFetchingWeather] = useState(false);
     const [isCapturing, setIsCapturing] = useState(false);
 
+    // Stato per pannello richiudibile (collapsible) - utile su mobile
+    const [isPanelExpanded, setIsPanelExpanded] = useState(true);
+
     // Funzione per generare una mappa statica come fallback (usando OSM static)
     const generateStaticMapImage = async (map: L.Map): Promise<string | null> => {
         try {
@@ -505,80 +508,102 @@ const MapEditor = forwardRef<MapEditorHandle, MapEditorProps>(({ onMapReady }, r
                 </div>
             )}
 
-            <div className="absolute top-4 right-4 z-[1000] w-80 flex flex-col gap-4 pointer-events-none">
-                <div className="glass-card p-2 rounded-xl pointer-events-auto flex gap-2">
-                    <input
-                        type="text"
-                        placeholder="Cerca località..."
-                        className="flex-grow bg-transparent outline-none px-2 text-sm"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                    />
-                    <button
-                        onClick={handleSearch}
-                        className="p-2 bg-[var(--primary)] text-white rounded-lg hover:brightness-110"
-                        disabled={isSearching}
-                    >
-                        <Search size={16} />
-                    </button>
-                </div>
+            <div className="absolute top-4 right-4 z-[1000] flex flex-col items-end gap-2 pointer-events-none">
+                {/* Pulsante Toggle Pannello */}
+                <button
+                    onClick={() => setIsPanelExpanded(!isPanelExpanded)}
+                    className="pointer-events-auto w-10 h-10 bg-[var(--primary)] text-white rounded-full shadow-lg flex items-center justify-center hover:brightness-110 transition-all"
+                    title={isPanelExpanded ? "Nascondi pannello" : "Mostra pannello"}
+                >
+                    {isPanelExpanded ? (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="18 15 12 9 6 15"></polyline>
+                        </svg>
+                    ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    )}
+                </button>
 
-                <div className="glass-card p-4 rounded-xl pointer-events-auto space-y-4">
-                    <div className="flex items-center gap-2 text-[var(--primary)] border-b border-[var(--glass-border)] pb-2">
-                        <Ruler size={18} />
-                        <h3 className="font-bold text-sm">Dati Area</h3>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-2 text-sm">
-                        <div className="opacity-70">Superficie:</div>
-                        <div className="font-bold text-right">{stats.area} Ha</div>
-
-                        <div className="opacity-70">Perimetro:</div>
-                        <div className="font-bold text-right">{stats.perimeter} m</div>
-
-                        <div className="opacity-70 col-span-2 text-xs font-mono mt-1 text-center">
-                            {stats.center || "Disegna un'area per iniziare"}
-                        </div>
-                    </div>
-
-                    <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg border border-blue-100 dark:border-blue-800">
-                        <div className="flex justify-between items-center mb-2">
-                            <div className="flex items-center gap-2 text-blue-700 dark:text-blue-300 text-xs font-bold">
-                                <CloudSun size={14} />
-                                METEO LOCALE
-                            </div>
+                {/* Pannello Ricerca e Dati (Collapsibile) */}
+                {isPanelExpanded && (
+                    <div className="w-80 flex flex-col gap-4 transition-all duration-300">
+                        <div className="glass-card p-2 rounded-xl pointer-events-auto flex gap-2">
+                            <input
+                                type="text"
+                                placeholder="Cerca località..."
+                                className="flex-grow bg-transparent outline-none px-2 text-sm"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                            />
                             <button
-                                onClick={handleGetWeather}
-                                className="text-[10px] bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-2 py-1 rounded hover:brightness-95"
-                                disabled={isFetchingWeather}
+                                onClick={handleSearch}
+                                className="p-2 bg-[var(--primary)] text-white rounded-lg hover:brightness-110"
+                                disabled={isSearching}
                             >
-                                {isFetchingWeather ? '...' : 'Aggiorna'}
+                                <Search size={16} />
                             </button>
                         </div>
 
-                        {weather ? (
-                            <div className="space-y-1 text-xs">
-                                <div className="flex justify-between">
-                                    <span>Vento:</span>
-                                    <span className="font-bold">{weather.wind}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span>Temp:</span>
-                                    <span className="font-bold">{weather.temp}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span>Umidità:</span>
-                                    <span className="font-bold">{weather.humidity}</span>
+                        <div className="glass-card p-4 rounded-xl pointer-events-auto space-y-4">
+                            <div className="flex items-center gap-2 text-[var(--primary)] border-b border-[var(--glass-border)] pb-2">
+                                <Ruler size={18} />
+                                <h3 className="font-bold text-sm">Dati Area</h3>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-2 text-sm">
+                                <div className="opacity-70">Superficie:</div>
+                                <div className="font-bold text-right">{stats.area} Ha</div>
+
+                                <div className="opacity-70">Perimetro:</div>
+                                <div className="font-bold text-right">{stats.perimeter} m</div>
+
+                                <div className="opacity-70 col-span-2 text-xs font-mono mt-1 text-center">
+                                    {stats.center || "Disegna un'area per iniziare"}
                                 </div>
                             </div>
-                        ) : (
-                            <div className="text-[10px] opacity-60 text-center py-1">
-                                Nessun dato meteo
+
+                            <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg border border-blue-100 dark:border-blue-800">
+                                <div className="flex justify-between items-center mb-2">
+                                    <div className="flex items-center gap-2 text-blue-700 dark:text-blue-300 text-xs font-bold">
+                                        <CloudSun size={14} />
+                                        METEO LOCALE
+                                    </div>
+                                    <button
+                                        onClick={handleGetWeather}
+                                        className="text-[10px] bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-2 py-1 rounded hover:brightness-95"
+                                        disabled={isFetchingWeather}
+                                    >
+                                        {isFetchingWeather ? '...' : 'Aggiorna'}
+                                    </button>
+                                </div>
+
+                                {weather ? (
+                                    <div className="space-y-1 text-xs">
+                                        <div className="flex justify-between">
+                                            <span>Vento:</span>
+                                            <span className="font-bold">{weather.wind}</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <span>Temp:</span>
+                                            <span className="font-bold">{weather.temp}</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <span>Umidità:</span>
+                                            <span className="font-bold">{weather.humidity}</span>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="text-[10px] opacity-60 text-center py-1">
+                                        Nessun dato meteo
+                                    </div>
+                                )}
                             </div>
-                        )}
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
         </div>
     );

@@ -80,6 +80,7 @@ export default function Home() {
             humidity: data.current.relative_humidity_2m.toString(),
             wind: data.current.wind_speed_10m.toString()
           }));
+          alert("Meteo sincronizzato! Campi compilati automaticamente.");
         }
       } catch (error) {
         console.error("Errore meteo:", error);

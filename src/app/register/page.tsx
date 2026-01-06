@@ -47,6 +47,7 @@ export default function RegisterPage() {
                 email: cleanEmail,
                 password,
                 options: {
+                    emailRedirectTo: typeof window !== 'undefined' ? `${window.location.origin}/` : undefined,
                     data: {
                         first_name: nome,
                         last_name: cognome,

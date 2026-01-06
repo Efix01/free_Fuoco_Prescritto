@@ -38,7 +38,15 @@ export default function Home() {
           router.replace('/landing');
         }
 
-        return () => subscription.unsubscribe();
+        // Safety timeout: if after 4 seconds we are still here (e.g. hash parsing failed), go to landing
+        const timeout = setTimeout(() => {
+          router.replace('/landing');
+        }, 4000);
+
+        return () => {
+          subscription.unsubscribe();
+          clearTimeout(timeout);
+        };
       }
     };
 

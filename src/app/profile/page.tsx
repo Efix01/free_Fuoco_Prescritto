@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { db } from '@/lib/db';
-import { User, LogOut, FileText, Calendar, MapPin, Loader2 } from 'lucide-react';
+import { User, LogOut, FileText, Calendar, MapPin, Loader2, Map } from 'lucide-react';
 import Link from 'next/link';
 
 // Define the type for the Burn record
@@ -139,6 +139,26 @@ export default function ProfilePage() {
                         <p className="text-xs opacity-60">Accedi ai moduli e strumenti di campo</p>
                     </div>
                 </a>
+
+                <Link href="/map" className="glass-card flex items-center gap-4 py-4 px-5 hover:bg-white/40 transition-colors group">
+                    <div className="w-12 h-12 rounded-full bg-green-100 text-green-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <Map size={24} />
+                    </div>
+                    <div>
+                        <h3 className="font-bold text-[var(--foreground)]">Cartografia</h3>
+                        <p className="text-xs opacity-60">Mappa operativa e pianificazione</p>
+                    </div>
+                </Link>
+
+                <Link href="/report" className="glass-card flex items-center gap-4 py-4 px-5 hover:bg-white/40 transition-colors group">
+                    <div className="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <FileText size={24} />
+                    </div>
+                    <div>
+                        <h3 className="font-bold text-[var(--foreground)]">Segnalazione</h3>
+                        <p className="text-xs opacity-60">Inserisci nuova operazione</p>
+                    </div>
+                </Link>
 
                 {/* Stats */}
                 <div className="glass-card flex justify-between items-center py-4">

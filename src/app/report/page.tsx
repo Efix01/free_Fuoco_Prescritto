@@ -9,6 +9,12 @@ import { v4 as uuidv4 } from 'uuid';
 import Link from 'next/link';
 import SafetyModule from '@/components/SafetyModule';
 import PersonnelManager, { PersonnelData } from '@/components/PersonnelManager';
+import dynamic from 'next/dynamic';
+
+const MapEditor = dynamic(() => import('@/components/MapEditor'), {
+    loading: () => <div className="flex h-64 items-center justify-center"><Loader2 className="animate-spin text-[var(--primary)]" size={32} /></div>,
+    ssr: false
+});
 
 export default function ReportPage() {
     const [formData, setFormData] = useState({
@@ -377,10 +383,20 @@ export default function ReportPage() {
             <button
                 onClick={handleExportPDF}
                 disabled={!report}
-                className="w-full max-w-lg mb-12 bg-gray-800 hover:bg-gray-900 text-white font-bold py-4 rounded-xl shadow-lg flex justify-center items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                className="w-full max-w-lg mb-8 bg-gray-800 hover:bg-gray-900 text-white font-bold py-4 rounded-xl shadow-lg flex justify-center items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
                 <Save size={20} /> ESPORTA REPORT PDF
             </button>
+
+            {/* Mappa Operativa */}
+            <div className="w-full max-w-lg mb-12">
+                <div className="bg-white/40 p-2 rounded-t-xl mb-1 ml-2">
+                    <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wider">Mappa Operativa</h2>
+                </div>
+                <div className="h-80 rounded-xl overflow-hidden border border-[var(--glass-border)] shadow-lg">
+                    <MapEditor />
+                </div>
+            </div>
 
             <style jsx>{`
         .input-field {

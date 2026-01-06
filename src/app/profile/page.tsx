@@ -129,6 +129,17 @@ export default function ProfilePage() {
 
             <div className="w-full max-w-lg space-y-6">
 
+                {/* Fast Links */}
+                <a href="/index.html" className="glass-card flex items-center gap-4 py-4 px-5 hover:bg-white/40 transition-colors group">
+                    <div className="w-12 h-12 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <FileText size={24} />
+                    </div>
+                    <div>
+                        <h3 className="font-bold text-[var(--foreground)]">Checklist Operative</h3>
+                        <p className="text-xs opacity-60">Accedi ai moduli e strumenti di campo</p>
+                    </div>
+                </a>
+
                 {/* Stats */}
                 <div className="glass-card flex justify-between items-center py-4">
                     <div>

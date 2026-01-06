@@ -11,6 +11,14 @@ const withPWA = withPWAInit({
 
 const nextConfig: NextConfig = {
   turbopack: {}, // Silence Turbopack vs webpack warning (PWA plugin uses webpack)
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+    ],
+  },
 };
 
 export default withPWA(nextConfig);

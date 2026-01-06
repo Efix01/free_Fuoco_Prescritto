@@ -236,7 +236,17 @@ export default function ReportPage() {
     };
 
     return (
-        <div className="flex min-h-screen flex-col items-center justify-start pt-20 pb-24 px-4 bg-[var(--background)]">
+        <div className="flex min-h-screen flex-col items-center justify-start pt-8 pb-24 px-4 bg-[var(--background)]">
+
+            {/* Mappa Operativa - In cima */}
+            <div className="w-full max-w-lg mb-6">
+                <div className="bg-white/40 p-2 rounded-t-xl mb-1 ml-2">
+                    <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wider">Mappa Operativa</h2>
+                </div>
+                <div className="h-72 rounded-xl overflow-hidden border border-[var(--glass-border)] shadow-lg">
+                    <MapEditor />
+                </div>
+            </div>
 
             <div className="w-full max-w-lg mb-6 flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -383,20 +393,10 @@ export default function ReportPage() {
             <button
                 onClick={handleExportPDF}
                 disabled={!report}
-                className="w-full max-w-lg mb-8 bg-gray-800 hover:bg-gray-900 text-white font-bold py-4 rounded-xl shadow-lg flex justify-center items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                className="w-full max-w-lg mb-12 bg-gray-800 hover:bg-gray-900 text-white font-bold py-4 rounded-xl shadow-lg flex justify-center items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
                 <Save size={20} /> ESPORTA REPORT PDF
             </button>
-
-            {/* Mappa Operativa */}
-            <div className="w-full max-w-lg mb-12">
-                <div className="bg-white/40 p-2 rounded-t-xl mb-1 ml-2">
-                    <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wider">Mappa Operativa</h2>
-                </div>
-                <div className="h-80 rounded-xl overflow-hidden border border-[var(--glass-border)] shadow-lg">
-                    <MapEditor />
-                </div>
-            </div>
 
             <style jsx>{`
         .input-field {

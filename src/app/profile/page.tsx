@@ -129,37 +129,6 @@ export default function ProfilePage() {
 
             <div className="w-full max-w-lg space-y-6">
 
-                {/* Fast Links */}
-                <a href="/index.html" className="glass-card flex items-center gap-4 py-4 px-5 hover:bg-white/40 transition-colors group">
-                    <div className="w-12 h-12 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <FileText size={24} />
-                    </div>
-                    <div>
-                        <h3 className="font-bold text-[var(--foreground)]">Checklist Operative</h3>
-                        <p className="text-xs opacity-60">Accedi ai moduli e strumenti di campo</p>
-                    </div>
-                </a>
-
-                <Link href="/map" className="glass-card flex items-center gap-4 py-4 px-5 hover:bg-white/40 transition-colors group">
-                    <div className="w-12 h-12 rounded-full bg-green-100 text-green-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <Map size={24} />
-                    </div>
-                    <div>
-                        <h3 className="font-bold text-[var(--foreground)]">Cartografia</h3>
-                        <p className="text-xs opacity-60">Mappa operativa e pianificazione</p>
-                    </div>
-                </Link>
-
-                <Link href="/report" className="glass-card flex items-center gap-4 py-4 px-5 hover:bg-white/40 transition-colors group">
-                    <div className="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <FileText size={24} />
-                    </div>
-                    <div>
-                        <h3 className="font-bold text-[var(--foreground)]">Segnalazione</h3>
-                        <p className="text-xs opacity-60">Inserisci nuova operazione</p>
-                    </div>
-                </Link>
-
                 {/* Stats */}
                 <div className="glass-card flex justify-between items-center py-4">
                     <div>
@@ -187,7 +156,11 @@ export default function ProfilePage() {
                     ) : (
                         <div className="space-y-3">
                             {burns.map((burn) => (
-                                <div key={burn.id} className={`glass card p-4 rounded-xl flex flex-col gap-2 transition-colors ${!burn.synced ? 'border-l-4 border-l-yellow-500 bg-yellow-50/50' : 'hover:bg-white/40'}`}>
+                                <Link
+                                    key={burn.id}
+                                    href="/registro"
+                                    className={`glass card p-4 rounded-xl flex flex-col gap-2 transition-colors ${!burn.synced ? 'border-l-4 border-l-yellow-500 bg-yellow-50/50' : 'hover:bg-white/40'}`}
+                                >
                                     <div className="flex justify-between items-start">
                                         <div className="flex flex-col">
                                             <h4 className="font-bold text-[var(--foreground)]">{burn.name}</h4>
@@ -212,7 +185,7 @@ export default function ProfilePage() {
                                     <div className="text-xs opacity-60">
                                         Modello: {burn.fuel_model}
                                     </div>
-                                </div>
+                                </Link>
                             ))}
                         </div>
                     )}

@@ -12,8 +12,8 @@ export default function Home() {
       const { data: { session } } = await supabase.auth.getSession();
 
       if (session) {
-        // User is logged in, go to app
-        router.replace('/profile');
+        // User is logged in, go to Home (Segnalazione)
+        router.replace('/report');
       } else {
         // User is not logged in
         // Check if we are handling an auth callback (e.g. from email link)
@@ -24,7 +24,7 @@ export default function Home() {
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
           if (event === 'SIGNED_IN' || session) {
-            router.replace('/profile');
+            router.replace('/report');
           } else if (event === 'SIGNED_OUT') {
             router.replace('/landing');
           }

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { User, Map, FileText, Home } from 'lucide-react';
+import { User, ClipboardList, Home, Users, GraduationCap } from 'lucide-react';
 
 export default function BottomNav() {
     const pathname = usePathname();
@@ -15,38 +15,31 @@ export default function BottomNav() {
         return null;
     }
 
-    // Define navigation items
+    // Define navigation items: Home, Checklist, Team, Training, Profilo
     const navItems = [
         {
             name: 'Home',
-            href: '/profile', // Profile acts as Dashboard/Home
+            href: '/report',
             icon: Home
         },
         {
-            name: 'Mappa',
-            href: '/map',
-            icon: Map
+            name: 'Checklist',
+            href: '/checklist',
+            icon: ClipboardList
         },
         {
-            name: 'Segnalazione',
-            href: '/report',
-            icon: FileText
+            name: 'Team',
+            href: '/team',
+            icon: Users
+        },
+        {
+            name: 'Training',
+            href: '/training',
+            icon: GraduationCap
         },
         {
             name: 'Profilo',
-            href: '/profile', // Redundant if Home is Profile, but requested. 
-            // User asked for "Home, Mappa, Segnalazione, Profilo".
-            // If Home = Profile, maybe we point Home to a Dashboard if we had one.
-            // For now, let's make Home point to Profile, and Profile point to Profile.
-            // Or better: Home -> /profile, and Profile -> /profile (maybe with anchor?)
-            // Actually, having two buttons go to the same place is confusing.
-            // Let's look at what the user said: "Barra di Navigazione in basso (con le icone Home, Mappa, Segnalazione, Profilo)"
-            // Since we don't have a distinct "Dashboard" yet, maybe I'll just use Profile as Home.
-            // I will implement all 4 but maybe Home and Profile link to same place or I just skip Profile if it's dup.
-            // Let's stick to the 3 main ones: Dashboard(Profile), Map, Report. 
-            // BUT the user explicitly approved "Home, Mappa, Segnalazione, Profilo". 
-            // I'll add them all. Maybe Profilo can open a settings modal later?
-            // For now both go to /profile.
+            href: '/profile',
             icon: User
         }
     ];

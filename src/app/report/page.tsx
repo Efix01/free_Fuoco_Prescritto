@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
-import { ClipboardList, Loader2, Sparkles, Send, MapPin, Save, User } from 'lucide-react';
+import { ClipboardList, Loader2, Sparkles, Send, MapPin, Save, User, FileStack } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { db } from '@/lib/db';
 import { v4 as uuidv4 } from 'uuid';
@@ -10,6 +10,7 @@ import Link from 'next/link';
 import SafetyModule from '@/components/SafetyModule';
 import PersonnelManager, { PersonnelData } from '@/components/PersonnelManager';
 import dynamic from 'next/dynamic';
+import type { MapEditorHandle } from '@/components/MapEditor';
 
 const MapEditor = dynamic(() => import('@/components/MapEditor'), {
     loading: () => <div className="flex h-64 items-center justify-center"><Loader2 className="animate-spin text-[var(--primary)]" size={32} /></div>,
@@ -34,6 +35,8 @@ export default function ReportPage() {
     const [isSaving, setIsSaving] = useState(false);
     const [report, setReport] = useState<string | null>(null);
     const [workLog, setWorkLog] = useState<PersonnelData>({ details: {}, total: 0 });
+
+    const mapEditorRef = useRef<MapEditorHandle>(null);
 
     const handleGeolocation = () => {
         if (!navigator.geolocation) {
@@ -217,6 +220,20 @@ export default function ReportPage() {
 
     const handleExportPDF = async () => {
         try {
+            // Cattura la mappa prima di generare il PDF
+            let mapImage: string | null = null;
+
+            if (mapEditorRef.current) {
+                console.log('Catturando mappa...');
+                mapImage = await mapEditorRef.current.captureMap();
+
+                if (mapImage) {
+                    console.log('Mappa catturata con successo');
+                } else {
+                    console.warn('Cattura mappa fallita, PDF senza mappa');
+                }
+            }
+
             const mod = await import('@/utils/generatePDF');
             await mod.generateOperationalReport({
                 name: formData.name || "Operazione Senza Nome",
@@ -224,6 +241,7 @@ export default function ReportPage() {
                 status: "Planning",
                 aiReport: report,
                 personnel: workLog,
+                mapImageBase64: mapImage, // Include mappa nel PDF
             });
         } catch (error) {
             console.error("Errore export PDF:", error);
@@ -244,7 +262,7 @@ export default function ReportPage() {
                     <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wider">Mappa Operativa</h2>
                 </div>
                 <div className="h-72 rounded-xl overflow-hidden border border-[var(--glass-border)] shadow-lg">
-                    <MapEditor />
+                    <MapEditor ref={mapEditorRef} />
                 </div>
             </div>
 
@@ -257,6 +275,9 @@ export default function ReportPage() {
                 </div>
 
                 <div className="flex gap-2">
+                    <Link href="/registro" className="p-2 glass rounded-full opacity-60 hover:opacity-100" title="Registro Operazioni">
+                        <FileStack size={20} />
+                    </Link>
                     <Link href="/login" className="p-2 glass rounded-full opacity-60 hover:opacity-100">
                         <User size={20} />
                     </Link>
@@ -380,14 +401,6 @@ export default function ReportPage() {
             {/* Safety Module */}
             <div className="w-full max-w-lg mt-8 mb-6">
                 <SafetyModule onPhaseChange={(phase) => console.log('Phase changed:', phase)} />
-            </div>
-
-            {/* Personnel Manager */}
-            <div className="w-full max-w-lg mb-10">
-                <div className="bg-white/40 p-1 rounded-t-xl mb-1 ml-2">
-                    <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wider">Risorse Umane</h2>
-                </div>
-                <PersonnelManager onHoursUpdate={(data) => setWorkLog(data)} />
             </div>
 
             <button

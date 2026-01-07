@@ -483,7 +483,7 @@ const MapEditor = forwardRef<MapEditorHandle, MapEditorProps>(({ onMapReady }, r
                 @media (max-width: 768px) {
                     .leaflet-pm-toolbar {
                         transform: scale(0.75);
-                        transform-origin: top right;
+                        transform-origin: top left;
                     }
                     .leaflet-pm-toolbar .leaflet-pm-icon-delete,
                     .leaflet-pm-toolbar .leaflet-pm-icon-edit {
@@ -494,6 +494,11 @@ const MapEditor = forwardRef<MapEditorHandle, MapEditorProps>(({ onMapReady }, r
                         height: 26px !important;
                         line-height: 26px !important;
                         font-size: 14px !important;
+                    }
+                    /* Sposta controlli zoom su mobile per evitare sovrapposizioni */
+                    .leaflet-control-zoom {
+                        margin-top: 8px !important;
+                        margin-right: 8px !important;
                     }
                 }
             `}</style>
@@ -508,7 +513,8 @@ const MapEditor = forwardRef<MapEditorHandle, MapEditorProps>(({ onMapReady }, r
                 </div>
             )}
 
-            <div className="absolute top-4 right-4 z-[1000] flex flex-col items-end gap-2 pointer-events-none">
+            {/* Pannello Ricerca e Dati - posizionato sotto i controlli zoom */}
+            <div className="absolute top-20 sm:top-4 right-2 sm:right-4 z-[1000] flex flex-col items-end gap-2 pointer-events-none max-w-[calc(100vw-16px)] sm:max-w-none">
                 {/* Pulsante Toggle Pannello */}
                 <button
                     onClick={() => setIsPanelExpanded(!isPanelExpanded)}
@@ -528,7 +534,7 @@ const MapEditor = forwardRef<MapEditorHandle, MapEditorProps>(({ onMapReady }, r
 
                 {/* Pannello Ricerca e Dati (Collapsibile) */}
                 {isPanelExpanded && (
-                    <div className="w-80 flex flex-col gap-4 transition-all duration-300">
+                    <div className="w-[calc(100vw-24px)] sm:w-80 flex flex-col gap-4 transition-all duration-300">
                         <div className="glass-card p-2 rounded-xl pointer-events-auto flex gap-2">
                             <input
                                 type="text"

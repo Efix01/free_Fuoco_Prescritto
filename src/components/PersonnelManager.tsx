@@ -19,10 +19,20 @@ interface Person {
     role: string;
 }
 
-export default function PersonnelManager({ onHoursUpdate }: { onHoursUpdate: (data: PersonnelData) => void }) {
+interface PersonnelManagerProps {
+    onHoursUpdate: (data: PersonnelData) => void;
+    initialSelectedIds?: string[];
+    initialHoursLog?: Record<string, string>;
+}
+
+export default function PersonnelManager({
+    onHoursUpdate,
+    initialSelectedIds = [],
+    initialHoursLog = {}
+}: PersonnelManagerProps) {
     const [allPersonnel, setAllPersonnel] = useState<Person[]>([]);
-    const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-    const [hoursLog, setHoursLog] = useState<Record<string, string>>({});
+    const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set(initialSelectedIds));
+    const [hoursLog, setHoursLog] = useState<Record<string, string>>(initialHoursLog);
 
     // Stati per aggiungere nuovi operatori
     const [newName, setNewName] = useState('');

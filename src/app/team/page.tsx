@@ -3,18 +3,17 @@
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import PersonnelManager, { PersonnelData } from '@/components/PersonnelManager';
-import { useState } from 'react';
+import { useBurnContext } from '@/context/BurnContext';
 
 export default function TeamPage() {
-    const [personnelData, setPersonnelData] = useState<PersonnelData>({
-        details: {},
-        total: 0,
-        activeCount: 0,
-        participants: []
-    });
+    const { teamSelection, setTeamSelection } = useBurnContext();
 
     const handlePersonnelUpdate = (data: PersonnelData) => {
-        setPersonnelData(data);
+        setTeamSelection(prev => ({
+            ...prev,
+            personnelData: data,
+            selectedIds: data.participants?.map(p => p.id) || [],
+        }));
     };
 
     return (
@@ -33,16 +32,16 @@ export default function TeamPage() {
             </header>
 
             {/* Riepilogo */}
-            {personnelData.activeCount && personnelData.activeCount > 0 ? (
+            {teamSelection.personnelData.activeCount && teamSelection.personnelData.activeCount > 0 ? (
                 <div className="mx-4 mt-4 bg-white rounded-xl p-4 shadow-md border-l-4 border-green-600">
                     <div className="flex justify-between items-center">
                         <div>
                             <p className="text-sm text-gray-500">Operatori Attivi</p>
-                            <p className="text-2xl font-bold text-green-700">{personnelData.activeCount}</p>
+                            <p className="text-2xl font-bold text-green-700">{teamSelection.personnelData.activeCount}</p>
                         </div>
                         <div className="text-right">
                             <p className="text-sm text-gray-500">Ore Totali</p>
-                            <p className="text-2xl font-bold text-gray-800">{personnelData.total}h</p>
+                            <p className="text-2xl font-bold text-gray-800">{teamSelection.personnelData.total}h</p>
                         </div>
                     </div>
                 </div>
@@ -50,8 +49,13 @@ export default function TeamPage() {
 
             {/* Personnel Manager */}
             <div className="p-4">
-                <PersonnelManager onHoursUpdate={handlePersonnelUpdate} />
+                <PersonnelManager
+                    onHoursUpdate={handlePersonnelUpdate}
+                    initialSelectedIds={teamSelection.selectedIds}
+                    initialHoursLog={teamSelection.hoursLog}
+                />
             </div>
         </div>
     );
 }
+

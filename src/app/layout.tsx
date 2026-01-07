@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import BottomNav from "@/components/BottomNav";
 import TopHeader from "@/components/TopHeader";
+import { BurnProvider } from "@/context/BurnContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -52,9 +53,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased pt-16 pb-16`}
       >
-        <TopHeader />
-        {children}
-        <BottomNav />
+        <BurnProvider>
+          <TopHeader />
+          {children}
+          <BottomNav />
+        </BurnProvider>
       </body>
     </html>
   );

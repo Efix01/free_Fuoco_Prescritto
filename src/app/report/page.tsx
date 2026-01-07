@@ -1,16 +1,18 @@
 
 "use client";
 
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { ClipboardList, Loader2, Sparkles, Send, MapPin, Save, User, FileStack } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { db } from '@/lib/db';
 import { v4 as uuidv4 } from 'uuid';
 import Link from 'next/link';
 import SafetyModule from '@/components/SafetyModule';
-import PersonnelManager, { PersonnelData } from '@/components/PersonnelManager';
+import { PersonnelData } from '@/components/PersonnelManager';
 import dynamic from 'next/dynamic';
 import type { MapEditorHandle } from '@/components/MapEditor';
+import { useBurnContext } from '@/context/BurnContext';
+import { useState } from 'react';
 
 const MapEditor = dynamic(() => import('@/components/MapEditor'), {
     loading: () => <div className="flex h-64 items-center justify-center"><Loader2 className="animate-spin text-[var(--primary)]" size={32} /></div>,
@@ -18,23 +20,15 @@ const MapEditor = dynamic(() => import('@/components/MapEditor'), {
 });
 
 export default function ReportPage() {
-    const [formData, setFormData] = useState({
-        name: '',
-        location: '',
-        fuelModel: '',
-        temp: '',
-        humidity: '',
-        wind: '',
-        slope: '',
-        fuelMoisture: '',
-        aspect: ''
-    });
+    // Usa il context globale per persistere i dati
+    const { formData, setFormData, teamSelection, report, setReport } = useBurnContext();
 
     const [isLoading, setIsLoading] = useState(false);
     const [isLocating, setIsLocating] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
-    const [report, setReport] = useState<string | null>(null);
-    const [workLog, setWorkLog] = useState<PersonnelData>({ details: {}, total: 0 });
+
+    // workLog derivato da teamSelection per compatibilità
+    const workLog: PersonnelData = teamSelection.personnelData;
 
     const mapEditorRef = useRef<MapEditorHandle>(null);
 
